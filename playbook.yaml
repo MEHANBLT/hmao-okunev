@@ -49,7 +49,7 @@
         - name: "Disable selinux"
           ansible.builtin.lineinfile:
             path: /etc/selinux/config
-            regexp: '^SELINUX='
+            regexp: '^SELINUX=*'
             line: SELINUX=disabled
             backup: true
         - name: "Add docker repo for centos"
