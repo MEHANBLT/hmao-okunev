@@ -46,12 +46,6 @@
             - firewalld
             - nginx
             - yum-utils
-        - name: "Disable selinux"
-          ansible.builtin.lineinfile:
-            path: /etc/selinux/config
-            regexp: '^SELINUX=*'
-            line: SELINUX=disabled
-            backup: true
         - name: "Add docker repo for centos"
           ansible.builtin.shell:
             cmd: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
@@ -139,5 +133,12 @@
         ansible.builtin.shell:
           cmd: docker-compose up -d
           chdir: /skillcloud-nginx
+      - name: "Disable selinux"
+        ansible.builtin.lineinfile:
+          path: /etc/selinux/config
+          regexp: 'SELINUX=enforcing'
+          line: 'SELINUX=disabled'
+          backup: true
+        when: ansible_os_family == "RedHat"
       - name: "Rebiit nachines"
         ansible.builtin.reboot:
